@@ -30,7 +30,7 @@ git clone https://github.com/leandro-hbs/teste-ns-3
 Após a clonagem do repositório, recomenda-se a instalação das dependências
 
 ```shell
-cd positron
+cd teste-ns-3
 sudo bash script/dependencies.sh
 ```
 
