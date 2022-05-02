@@ -24,7 +24,7 @@ Instruções de instalação e uso são descritas a seguir.
 Primeiramente, deve-se fazer um clone deste repositório através da ferramenta Git
 
 ```shell
-git clone https://gitlab.com/ifpb/positron
+git clone https://github.com/leandro-hbs/teste-ns-3
 ```
 
 Após a clonagem do repositório, recomenda-se a instalação das dependências
