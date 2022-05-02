@@ -72,9 +72,9 @@ Exemplos de parâmetros de simulação
 
 ## Contatos
 
-Diego M. Rocha (diego.rocha[at]academico.ifpb.edu.br)
-Ayrton M. Porto de Gois (ayrton.porto[at]academico.ifpb.edu.br)
-Leandro H. Batista da silva (leandro.batista[at]academico.ifpb.edu.br)
-Fernando Matos (fernando[at]ci.ufpb.br)
-Aldri Santos (aldri[at]dcc.ufmg.br)
-Paulo Ditarso Maciel Jr. (paulo.maciel[at]ifpb.edu.br)
+* Diego M. Rocha (diego.rocha[at]academico.ifpb.edu.br)
+* Ayrton M. Porto de Gois (ayrton.porto[at]academico.ifpb.edu.br)
+* Leandro H. Batista da silva (leandro.batista[at]academico.ifpb.edu.br)
+* Fernando Matos (fernando[at]ci.ufpb.br)
+* Aldri Santos (aldri[at]dcc.ufmg.br)
+* Paulo Ditarso Maciel Jr. (paulo.maciel[at]ifpb.edu.br)
