@@ -7,7 +7,6 @@
 #include "ns3/mobility-model.h"
 #include "ns3/mobility-helper.h"
 #include "ns3/network-module.h"
-//#include "ns3/csma-module.h"
 #include "ns3/internet-module.h"
 #include "ns3/point-to-point-module.h"
 #include "ns3/applications-module.h"
@@ -17,22 +16,19 @@
 using namespace ns3;
 using namespace std;
 
-NS_LOG_COMPONENT_DEFINE("TerceiroExemplo");
-
-// void SchedAppArrival(Ptr<ControlLayerClientHelper> controller, std::string policy, float start, float duration, float cpu, float memory, float storage, int app_id, NodeContainer controlNodes, Ipv6InterfaceContainer controlInterfaces, bool balanced)
-// {
-//   (*controller).AddAppToDatabase(policy, start, duration, cpu, memory, storage);
-//   (*controller).AllocateAPP(app_id, controlNodes, controlInterfaces, balanced);
-// }
+NS_LOG_COMPONENT_DEFINE("POSITRON");
 
 int main(int argc, char *argv[])
 {
-  bool verbose = false;
+
+  bool logging = false;
+  bool tracing = false;
   bool balanced = false;
   uint32_t seed = 42;
 
   CommandLine cmd(__FILE__);
-  cmd.AddValue("verbose", "Tell control applications to log if true", verbose);
+  cmd.AddValue("logging", "Tell control applications to logging if true", logging);
+  cmd.AddValue("tracing", "Tell control applications to tracing if true", tracing);
   cmd.AddValue("balanced", "Tell control whether is a balanced policy", balanced);
   cmd.AddValue("seed", "Set seed as an input parameter", seed);
 
@@ -40,7 +36,7 @@ int main(int argc, char *argv[])
 
   SeedManager::SetSeed(seed);
 
-  if (verbose)
+  if (logging)
   {
     LogComponentEnable("ControlLayerClientApplication", LOG_LEVEL_INFO);
     LogComponentEnable("ControlLayerServerApplication", LOG_LEVEL_INFO);
@@ -65,7 +61,7 @@ int main(int argc, char *argv[])
     int nodeQtd = attr["nNodes"].as<int>();
     if (nodeQtd > 0)
     {
-      // Definir os Atributos
+      // Defining nodes' attributes
       Config::SetDefault("ns3::Node::Power", DoubleValue(attr["power"].as<double>()));
       Config::SetDefault("ns3::Node::InitialConsumption", DoubleValue(attr["initialConsumption"].as<double>()));
       Config::SetDefault("ns3::Node::CurrentConsumption", DoubleValue(attr["currentConsumption"].as<double>()));
@@ -74,10 +70,10 @@ int main(int argc, char *argv[])
       Config::SetDefault("ns3::Node::Transmission", DoubleValue(attr["transmission"].as<double>()));
       Config::SetDefault("ns3::Node::Storage", DoubleValue(attr["storage"].as<double>()));
 
-      // Criar os workers
+      // Creating workers
       workerNodes.Create(nodeQtd);
 
-      // Nomear os workers
+      // Naming workers
       for (int i = 0; i < nodeQtd; i++)
       {
         int nodeId = workerNodes.GetN() - 1 - i;
@@ -87,13 +83,6 @@ int main(int argc, char *argv[])
     }
   }
   controlNodes.Add(workerNodes);
-
-  // cout << "List of nodes:" << endl;
-  // for (NodeList::Iterator node = NodeList::Begin(); node != NodeList::End(); node++)
-  // {
-  //   cout << "Noh: " << (*node) << "; noh ID: " << (*node)->GetId() << "; Nome do noh: " << Names::FindName(*node) << ";" << endl;
-  // }
-  // cout << "" << endl;
 
   MobilityHelper mobility;
   mobility.SetMobilityModel("ns3::ConstantPositionMobilityModel");
@@ -148,9 +137,7 @@ int main(int argc, char *argv[])
   }
   cout << "" << endl;
 
-  // add nodes to database
-  // PAULO: O QUE PODERIAMOS FAZER DEPOIS AQUI EH MANDAR UM PKT PARA CADA NOH
-  // SOLICITANDO AS INFORMACOES PARA CADASTRAR NO BANCO
+  // Adding nodes to database
   for (uint32_t i = 0; i < workerNodes.GetN(); i++)
   {
     Ptr<Node> node = workerNodes.Get(i);
@@ -166,36 +153,42 @@ int main(int argc, char *argv[])
         Names::FindName(node));
   }
 
-  //add applications to database
+  // Adding applications to database
   for (std::size_t i = 0; i < apps.size(); i++)
   {
 
     std::string policy = apps[i]["policy"].as<std::string>();
     float start = apps[i]["start"].as<float>();
-    float duration = apps[i]["duration"].as<float>();
     float cpu = apps[i]["cpu"].as<float>();
     float memory = apps[i]["memory"].as<float>();
     float storage = apps[i]["storage"].as<float>();
 
+    float duration = 0.0;
+    float mean = apps[i]["duration"].as<float>();
+    float variance = 30.0;
+    while(duration <= 0.0) {
+        Ptr<NormalRandomVariable> auxDuration = CreateObject<NormalRandomVariable> ();
+        auxDuration->SetAttribute ("Mean", DoubleValue (mean));
+        auxDuration->SetAttribute ("Variance", DoubleValue (variance));
+        duration = auxDuration->GetValue ();
+    }
+
     int app_id = i + 1;
 
-    // controller.AddAppToDatabase(policy, start, duration, cpu, memory, storage);
-//    void (ControlLayerClientHelper::*AddToDB)(std::string, float, float, double, double, double) = &ControlLayerClientHelper::AddAppToDatabase;
     Simulator::Schedule(Seconds(start), &ControlLayerClientHelper::AddAppToDatabase, &controller, policy, start, duration, cpu, memory, storage);
-
-    // controller.AllocateAPP(app_id, controlNodes, controlInterfaces, balanced);
-//    void (ControlLayerClientHelper::*AllPP)(int) = &ControlLayerClientHelper::AllocateAPP;
     Simulator::Schedule(Seconds(start), &ControlLayerClientHelper::AllocateAPP, &controller, app_id);
+
   }
 
-  // controller.Manager(apps.size());
+  if (tracing) {
+    std::string scenarioName = input["configs"][0]["scenarioName"].as<std::string>();
+    ethernet.EnablePcap (scenarioName, controlDevices.Get (0), true);
+    //ethernet.EnablePcapAll (scenarioName);
+  }
 
-  // std::string scenarioName = input["configs"][0]["scenarioName"].as<std::string>();
-
-  // ethernet.EnablePcap ("terceiro", controlDevices.Get (1), true);
-  //ethernet.EnablePcapAll (scenarioName);
-
+  //Simulator::Stop(Seconds (simulationTime));
   Simulator::Run();
   Simulator::Destroy();
   return 0;
+
 }
