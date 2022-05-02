@@ -1,5 +1,5 @@
 
-POSITRON: Esquema de Alocação Justa de Dispositivos IoT Multifuncionais Ciente dos Recursos Computacionais
+POSITRON: Esquema de Alocação Justa de Dispositivos IoT Multifuncionais
 ================================
 
 ## Lista de conteúdo:
