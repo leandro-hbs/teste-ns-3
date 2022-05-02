@@ -12,7 +12,7 @@ POSITRON: Esquema de Alocação Justa de Dispositivos IoT Multifuncionais
 
 ## Informações
 
-O POSITRON foi implementado e testado com base na versão 3.35 do [NS-3](https://nsnam.org), em um ambiente Linux Ubuntu 20.04.
+O POSITRON foi implementado e testado com base na versão 3.35 do [NS-3](https://www.nsnam.org), em um ambiente Linux Ubuntu 20.04.
 
 Para o seu funcionamento, é necessária a instalação prévia do SQLite 3 e da biblioteca YAML CPP.
 
