@@ -4,9 +4,9 @@ POSITRON: Esquema de Alocação Justa de Dispositivos IoT Multifuncionais Ciente
 
 ## Lista de conteúdo:
 
-1) [Informações](#informacoes)
-2) [Instalação](#instalacao)
-3) [Utilização](#utilizacao)
+1) [Informações](#informações)
+2) [Instalação](#instalação)
+3) [Utilização](#utilização)
 4) [Contatos](#contatos)
 
 
